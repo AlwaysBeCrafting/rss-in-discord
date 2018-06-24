@@ -3,7 +3,7 @@
 declare module "rss-to-json" {
   export function load(
     url: string,
-    callback: (error: string, channel: Channel) => void
+    callback: (error: Error, channel: Channel) => void
   ): void;
 
   export interface Channel {
