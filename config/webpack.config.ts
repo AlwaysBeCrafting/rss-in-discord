@@ -15,7 +15,8 @@ const config: Webpack.Configuration = {
     path: `${path}/build`,
     filename: "bot.js"
   },
-  mode: "development"
+  mode: "development",
+  target: "node"
 };
 
 export default config;
