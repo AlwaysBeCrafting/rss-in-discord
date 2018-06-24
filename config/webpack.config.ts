@@ -1,0 +1,21 @@
+import Webpack from "webpack";
+import { path } from "app-root-path";
+
+const config: Webpack.Configuration = {
+  entry: "./src/index.ts",
+  module: {
+    rules: [
+      {
+        test: /.*\.ts$/,
+        use: "ts-loader"
+      }
+    ]
+  },
+  output: {
+    path: `${path}/build`,
+    filename: "bot.js"
+  },
+  mode: "development"
+};
+
+export default config;
