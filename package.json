@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ts-node node_modules/.bin/webpack --config config/webpack.config.ts"
+    "build": "ts-node node_modules/.bin/webpack --config config/webpack.config.ts",
+    "start": "node ./build/bot.js",
+    "build:watch": "npm run build -- -w",
+    "start:watch": "nodemon --exec 'npm run start'"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,7 @@
     "@types/webpack": "^4.4.2",
     "app-root-path": "^2.1.0",
     "jest": "^23.1.0",
+    "nodemon": "^1.18.2",
     "prettier": "^1.13.5",
     "ts-loader": "^4.4.1",
     "ts-node": "^7.0.0",
