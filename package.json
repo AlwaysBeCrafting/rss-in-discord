@@ -1,7 +1,7 @@
 {
   "name": "rss-in-discord",
   "version": "0.1.0",
-  "description": "- rss-to-json:   https://www.npmjs.com/package/rss-to-json",
+  "description": "A rss bot for discord",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
