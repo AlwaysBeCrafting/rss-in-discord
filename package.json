@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "discord.js": "^11.3.2",
-    "rss-to-json": "^1.0.4"
+    "feed-to-json-promise": "^1.6.1"
   }
 }
