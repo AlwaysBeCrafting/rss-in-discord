@@ -1,38 +1,53 @@
-import { load } from "rss-to-json";
+import Feed = require("feed-to-json-promise");
 import { Client, TextChannel } from "discord.js";
 
 const client = new Client();
+const feed = new Feed();
 
-client.on("ready", () => {
+const serverID = "458034851296313375";
+
+client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  say("467844728990466049", "hello world");
+  addFeedChannel("https://xkcd.com/rss.xml", serverID);
+  const rss = await feed.load("https://xkcd.com/rss.xml");
+  const channelId = client.channels
+    .filter(channel => channel.type === "text")
+    .find(
+      (channel: TextChannel) =>
+        channel.name === rss.title.toLowerCase().replace(/[^a-z0-9]/g, "")
+    ).id;
+  getFeedItems("https://xkcd.com/rss.xml")
+    .then(items =>
+      items.forEach(item => {
+        const channel = client.channels.get(channelId) as TextChannel;
+        channel.send(item.link);
+      })
+    )
+    .catch(console.error);
 });
-
-const say = (id: string, message: string) => {
-  client.guilds.forEach(guild => {
-    const channel = guild.channels.find(
-      channel => channel.type === "text" && channel.id === id
-    ) as TextChannel;
-    if (!channel) return;
-    channel.send(message);
-  });
-};
 
 client.on("message", msg => {
   if (msg.content === "ping") {
     msg.reply("pong");
   }
-  if (msg.content === "rss") {
-    msg.guild
-      .createChannel("test", "text")
-      .then(() =>
-        client.guilds.forEach(guild =>
-          console.log(guild.channels.find("name", "test"))
-        )
-      );
-  }
 });
 
 client.login("NDY3ODE4MjQxNjM3NDgyNTA2.DiwNcA.2ioTOx8iFIj5KnBvMZe07lNDZVU");
 
-load("https://xkcd.com/rss.xml", (_, rss) => console.log(rss));
+const addFeedChannel = async (url: string, guildID: string) => {
+  const channelName = await feed.load(url).then(feed => feed.title);
+  const guild = client.guilds.find(guild => guild.id === guildID);
+  if (
+    !guild.channels.find(
+      channel =>
+        channel.type === "text" &&
+        channel.name === channelName.toLowerCase().replace(/[^a-z0-9]/g, "")
+    )
+  ) {
+    guild.createChannel(channelName, "text");
+  }
+};
+
+const getFeedItems = async (url: string) => {
+  return feed.load(url).then(rss => rss.items);
+};
