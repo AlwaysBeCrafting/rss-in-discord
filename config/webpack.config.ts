@@ -3,6 +3,7 @@ import { path } from "app-root-path";
 
 const config: Webpack.Configuration = {
   entry: "./src/index.ts",
+  resolve: { mainFields: ["main", "module"] },
   module: {
     rules: [
       {
