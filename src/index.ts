@@ -28,18 +28,16 @@ client.login("NDY3ODE4MjQxNjM3NDgyNTA2.DiwNcA.2ioTOx8iFIj5KnBvMZe07lNDZVU");
 
 const addFeedChannel = async (url: string, guildId: string) => {
   const rssFeed = await feed.load(url);
-  const channelName = rssFeed.title.toLowerCase().replace(/[^a-z0-9]/g, "");
   const guild = client.guilds.find(guild => guild.id === guildId);
-  if (
-    !guild.channels.find(
-      channel => channel.type === "text" && channel.name === channelName
-    )
-  ) {
-    guild.createChannel(channelName, "text");
+  const channelName = rssFeed.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const channel = guild.channels
+    .filter(ch => ch.type === "text")
+    .find((ch: TextChannel) => ch.name === channelName);
+  if (!channel) {
+    const newChannel = await guild.createChannel(channelName, "text");
+    return newChannel.id;
   }
-  return client.channels
-    .filter(channel => channel.type === "text")
-    .find((channel: TextChannel) => channel.name === channelName).id;
+  return channel.id;
 };
 
 const getFeedItems = async (url: string) => {
