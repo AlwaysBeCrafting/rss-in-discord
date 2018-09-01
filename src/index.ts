@@ -10,8 +10,12 @@ client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   const rssFeed = "https://xkcd.com/rss.xml";
   const channelId = await addFeedChannel(rssFeed, serverID);
-  const items = await getFeedItems(rssFeed);
-  sendFeedItems(items, channelId);
+  try {
+    const items = await getFeedItems(rssFeed);
+    sendFeedItems(items, channelId);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 client.on("message", msg => {
