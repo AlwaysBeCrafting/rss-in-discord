@@ -10,9 +10,8 @@ client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   const rssFeed = "https://xkcd.com/rss.xml";
   const channelId = await addFeedChannel(rssFeed, serverID);
-  getFeedItems(rssFeed)
-    .then(items => sendFeedItems(items, channelId))
-    .catch(console.error);
+  const items = await getFeedItems(rssFeed);
+  sendFeedItems(items, channelId);
 });
 
 client.on("message", msg => {
@@ -24,9 +23,8 @@ client.on("message", msg => {
 client.login("NDY3ODE4MjQxNjM3NDgyNTA2.DiwNcA.2ioTOx8iFIj5KnBvMZe07lNDZVU");
 
 const addFeedChannel = async (url: string, guildID: string) => {
-  const channelName = await feed
-    .load(url)
-    .then(feed => feed.title.toLowerCase().replace(/[^a-z0-9]/g, ""));
+  const rssFeed = await feed.load(url);
+  const channelName = rssFeed.title.toLowerCase().replace(/[^a-z0-9]/g, "");
   const guild = client.guilds.find(guild => guild.id === guildID);
   if (
     !guild.channels.find(
@@ -41,7 +39,8 @@ const addFeedChannel = async (url: string, guildID: string) => {
 };
 
 const getFeedItems = async (url: string) => {
-  return feed.load(url).then(rss => rss.items);
+  const rssFeed = await feed.load(url);
+  return rssFeed.items;
 };
 
 const sendFeedItems = async (items: Array<Feed.Item>, channelId: string) => {
