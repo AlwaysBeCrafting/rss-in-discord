@@ -26,10 +26,10 @@ client.on("message", msg => {
 
 client.login("NDY3ODE4MjQxNjM3NDgyNTA2.DiwNcA.2ioTOx8iFIj5KnBvMZe07lNDZVU");
 
-const addFeedChannel = async (url: string, guildID: string) => {
+const addFeedChannel = async (url: string, guildId: string) => {
   const rssFeed = await feed.load(url);
   const channelName = rssFeed.title.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const guild = client.guilds.find(guild => guild.id === guildID);
+  const guild = client.guilds.find(guild => guild.id === guildId);
   if (
     !guild.channels.find(
       channel => channel.type === "text" && channel.name === channelName
