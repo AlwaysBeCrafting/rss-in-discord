@@ -24,7 +24,7 @@ client.on("message", msg => {
   }
 });
 
-client.login("NDY3ODE4MjQxNjM3NDgyNTA2.DiwNcA.2ioTOx8iFIj5KnBvMZe07lNDZVU");
+client.login(process.env.BOT_TOKEN);
 
 const addFeedChannel = async (url: string, guildId: string) => {
   const rssFeed = await feed.load(url);
@@ -49,7 +49,9 @@ const sendFeedItems = async (items: Array<Feed.Item>, channelId: string) => {
   await Promise.all(
     items.map(item => {
       const channel = client.channels.get(channelId) as TextChannel;
-      return channel.send(`${item.title}:\n<${item.link}>\n--------------------`);
+      return channel.send(
+        `${item.title}:\n<${item.link}>\n--------------------`
+      );
     })
   );
 };
