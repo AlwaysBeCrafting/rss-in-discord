@@ -6,3 +6,4 @@ services:
     build:
       context: ./bot
       dockerfile: Dockerfile
+    env_file: ./.bot-env
