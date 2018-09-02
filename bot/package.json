@@ -8,7 +8,8 @@
     "build": "ts-node node_modules/.bin/webpack --config config/webpack.config.ts",
     "start": "node ./build/bot.js",
     "build:watch": "npm run build -- -w",
-    "start:watch": "nodemon --exec 'npm run start'"
+    "start:watch": "nodemon --exec 'npm run start'",
+    "build:start": "npm run build && npm run start"
   },
   "repository": {
     "type": "git",
