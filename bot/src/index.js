@@ -1,7 +1,7 @@
 const Feed = require("feed-to-json-promise");
-const discord = require("discord.js");
+const { Client } = require("discord.js");
 
-const client = new discord.Client();
+const client = new Client();
 const feed = new Feed();
 
 const serverID = "458034851296313375";
@@ -24,7 +24,7 @@ client.on("message", msg => {
   }
 });
 
-client.login("NDY3ODE4MjQxNjM3NDgyNTA2.Dm0ucA.XiqUpB5PMrAOA3OEl0KSIYUjreE");
+client.login("NDY3ODE4MjQxNjM3NDgyNTA2.XTvj1Q.ar1KEsx5kjqJwPzXTK6MMFh58rY");
 
 const addFeedChannel = async (url, guildId) => {
   const rssFeed = await feed.load(url);
