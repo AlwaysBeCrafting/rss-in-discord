@@ -24,7 +24,7 @@ client.on("message", msg => {
   }
 });
 
-client.login("NDY3ODE4MjQxNjM3NDgyNTA2.XTvj1Q.ar1KEsx5kjqJwPzXTK6MMFh58rY");
+client.login(process.env.BOT_TOKEN);
 
 const addFeedChannel = async (url, guildId) => {
   const rssFeed = await feed.load(url);
