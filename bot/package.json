@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "ts-node node_modules/.bin/webpack --config config/webpack.config.ts",
-    "start": "node ./build/bot.js",
+    "start": "node ./src/index.js",
     "build:watch": "npm run build -- -w",
     "start:watch": "nodemon --exec 'npm run start'",
     "build:start": "npm run build && npm run start"
