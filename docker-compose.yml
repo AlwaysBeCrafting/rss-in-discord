@@ -1,9 +1,12 @@
 version: "3"
 
 services:
+  #  api:
   bot:
     image: bot
     build:
       context: ./bot
       dockerfile: Dockerfile
     env_file: ./.bot-env
+#  frontend:
+#  db:

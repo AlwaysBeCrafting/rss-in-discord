@@ -2,4 +2,4 @@ FROM node:alpine
 WORKDIR /bot
 COPY . /bot
 RUN npm install
-ENTRYPOINT ["npm","run","build:start"]
+ENTRYPOINT ["npm","run","dev"]
