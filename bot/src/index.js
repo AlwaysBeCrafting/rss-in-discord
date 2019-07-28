@@ -1,20 +1,22 @@
-const Feed = require("feed-to-json-promise");
 const { Client } = require("discord.js");
 
-const client = new Client();
-const feed = new Feed();
+const commands = require("./commands/index");
+const { getFeed } = require("./utilities/getFeed");
 
-const serverID = "458034851296313375";
+const client = new Client();
+const feedList = ["https://xkcd.com/rss.xml"];
+const serverId = "458034851296313375";
 
 client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  const rssFeed = "https://xkcd.com/rss.xml";
-  const channelId = await addFeedChannel(rssFeed, serverID);
-  try {
-    const items = await getFeedItems(rssFeed);
-    sendFeedItems(items, channelId);
-  } catch (error) {
-    console.error(error);
+  for (const rssFeed of feedList) {
+    try {
+      const channelId = await commands.add(rssFeed, serverId, client);
+      const feed = await getFeed(rssFeed);
+      sendFeedItems(feed.items, channelId);
+    } catch (error) {
+      console.error(error);
+    }
   }
 });
 
@@ -22,36 +24,39 @@ client.on("message", msg => {
   if (msg.content === "ping") {
     msg.reply("pong");
   }
+  if (!msg.mentions.users.size) {
+    return;
+  } else if (msg.mentions.users.first().username === "RnD") {
+    const args = msg.content.split(/\s+/);
+    args.shift();
+    runCommand(args);
+  }
 });
 
-client.login(process.env.BOT_TOKEN);
-
-const addFeedChannel = async (url, guildId) => {
-  const rssFeed = await feed.load(url);
-  const guild = client.guilds.find(guild => guild.id === guildId);
-  const channelName = rssFeed.title.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const channel = guild.channels
-    .filter(ch => ch.type === "text")
-    .find(ch => ch.name === channelName);
-  if (!channel) {
-    const newChannel = await guild.createChannel(channelName, "text");
-    return newChannel.id;
-  }
-  return channel.id;
-};
-
-const getFeedItems = async url => {
-  const rssFeed = await feed.load(url);
-  return rssFeed.items;
-};
+try {
+  client.login(process.env.BOT_TOKEN);
+} catch (error) {
+  console.log(error);
+}
 
 const sendFeedItems = async (items, channelId) => {
-  await Promise.all(
-    items.map(item => {
-      const channel = client.channels.get(channelId);
-      return channel.send(
+  try {
+    for (const item of items) {
+      const channel = await client.channels.get(channelId);
+      await channel.send(
         `${item.title}:\n<${item.link}>\n--------------------`
       );
-    })
-  );
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const runCommand = args => {
+  if (!commands[args[0]]) {
+    console.log("command not found");
+    return;
+  }
+
+  commands[args[0]](args[1], serverId, client);
 };
