@@ -11,9 +11,7 @@ client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   for (const rssFeed of feedList) {
     try {
-      const channelId = await commands.add(rssFeed, serverId, client);
-      const feed = await getFeed(rssFeed);
-      sendFeedItems(feed.items, channelId);
+      await commands.add([rssFeed], "none", serverId, client);
     } catch (error) {
       console.error(error);
     }
@@ -29,7 +27,7 @@ client.on("message", msg => {
   } else if (msg.mentions.users.first().username === "RnD") {
     const args = msg.content.split(/\s+/);
     args.shift();
-    runCommand(args);
+    runCommand(args, msg);
   }
 });
 
@@ -39,24 +37,11 @@ try {
   console.log(error);
 }
 
-const sendFeedItems = async (items, channelId) => {
-  try {
-    for (const item of items) {
-      const channel = await client.channels.get(channelId);
-      await channel.send(
-        `${item.title}:\n<${item.link}>\n--------------------`
-      );
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const runCommand = args => {
-  if (!commands[args[0]]) {
+const runCommand = (args, msg) => {
+  const [cmd, ...rest] = args;
+  if (!commands[cmd]) {
     console.log("command not found");
     return;
   }
-
-  commands[args[0]](args[1], serverId, client);
+  commands[cmd](rest, msg, serverId, client);
 };
