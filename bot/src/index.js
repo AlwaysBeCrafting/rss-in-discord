@@ -11,7 +11,7 @@ client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   for (const rssFeed of feedList) {
     try {
-      await commands.add([rssFeed], "none", serverId, client);
+      await commands.add([rssFeed], serverId, client);
     } catch (error) {
       console.error(error);
     }
@@ -37,11 +37,12 @@ try {
   console.log(error);
 }
 
-const runCommand = (args, msg) => {
+const runCommand = async (args, msg) => {
   const [cmd, ...rest] = args;
   if (!commands[cmd]) {
     console.log("command not found");
     return;
   }
-  commands[cmd](rest, msg, serverId, client);
+  const result = await commands[cmd](rest, serverId, client);
+  await msg.reply(result);
 };

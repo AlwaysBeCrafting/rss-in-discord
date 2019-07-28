@@ -1,12 +1,10 @@
 const { getFeed } = require("../utilities/getFeed");
 
-module.exports = async (args, msg, guildId, client) => {
+module.exports = async (args, guildId, client) => {
   const [url] = args;
   if (!url) {
-    await msg.reply(
-      `Usage: @RnD remove <rss URL>
-      Ex: @RnD remove <https://xkcd.com/rss.xml>`
-    );
+    return `Usage: @RnD remove <rss URL>
+      Ex: @RnD remove <https://xkcd.com/rss.xml>`;
   }
   try {
     const rssFeed = await getFeed(url);
@@ -16,16 +14,14 @@ module.exports = async (args, msg, guildId, client) => {
       .filter(ch => ch.type === "text")
       .find(ch => ch.name === channelName);
     if (!channel) {
-      await msg.reply(`Channel for ${url} doesn't exist.`);
-      return;
+      return `Channel for ${url} doesn't exist.`;
     }
     await channel.delete();
-    await msg.reply(`Channel removed.`);
+    return `Channel removed.`;
   } catch (error) {
     console.error(error.name);
-    await msg.reply(`Invalid rss URL.
+    return `Invalid rss URL.
       Usage: @RnD remove <rss URL>
-      Ex: @RnD remove <https://xkcd.com/rss.xml>
-    `);
+      Ex: @RnD remove <https://xkcd.com/rss.xml>`;
   }
 };

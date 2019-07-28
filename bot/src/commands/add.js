@@ -1,12 +1,10 @@
 const { getFeed } = require("../utilities/getFeed");
 
-module.exports = async (args, msg, guildId, client) => {
+module.exports = async (args, guildId, client) => {
   const [url] = args;
   if (!url) {
-    msg.reply(
-      `Usage: @RnD add <rss URL>
-      Ex: @RnD add <https://xkcd.com/rss.xml>`
-    );
+    return `Usage: @RnD add <rss URL>
+      Ex: @RnD add <https://xkcd.com/rss.xml>`;
   }
   try {
     const rssFeed = await getFeed(url);
@@ -19,13 +17,12 @@ module.exports = async (args, msg, guildId, client) => {
       channel = await guild.createChannel(channelName, "text");
     }
     sendMessage(rssFeed.items, channel.id, client);
-    return true;
+    return `Feed Added.`;
   } catch (error) {
     console.error(error.name);
-    msg.reply(`Invalid rss URL.
+    return `Invalid rss URL.
       Usage: @RnD add <rss URL>
-      Ex: @RnD add <https://xkcd.com/rss.xml>
-    `);
+      Ex: @RnD add <https://xkcd.com/rss.xml>`;
   }
 };
 
