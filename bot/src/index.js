@@ -39,10 +39,10 @@ try {
 
 const runCommand = async (args, msg) => {
   const [cmd, ...rest] = args;
-  if (!commands[cmd]) {
-    console.log("command not found");
-    return;
-  }
-  const result = await commands[cmd](rest, serverId, client);
+  const result =
+    !commands[cmd] || cmd === "help" || cmd === "-h"
+      ? await commands.help()
+      : await commands[cmd](rest, serverId, client);
+
   await msg.reply(result);
 };
