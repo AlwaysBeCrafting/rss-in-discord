@@ -1,11 +1,12 @@
 const { Client } = require("discord.js");
 
-const commands = require("./commands/index");
+const commands = require("./commands");
 const { getFeed } = require("./utilities/getFeed");
 
-const client = new Client();
 const feedList = ["https://xkcd.com/rss.xml"];
 const serverId = "458034851296313375";
+
+const client = new Client();
 
 client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -27,22 +28,19 @@ client.on("message", msg => {
   } else if (msg.mentions.users.first().username === "RnD") {
     const args = msg.content.split(/\s+/);
     args.shift();
-    runCommand(args, msg);
+    return runCommand(args, msg);
   }
 });
 
 try {
   client.login(process.env.BOT_TOKEN);
 } catch (error) {
-  console.log(error);
+  console.error(error);
 }
 
 const runCommand = async (args, msg) => {
   const [cmd, ...rest] = args;
-  const result =
-    !commands[cmd] || cmd === "help" || cmd === "-h"
-      ? await commands.help()
-      : await commands[cmd](rest, serverId, client);
-
+  const command = commands[cmd] || commands.help;
+  const result = await command(rest, serverId, client);
   await msg.reply(result);
 };

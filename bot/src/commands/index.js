@@ -5,5 +5,6 @@ const help = require("./help");
 module.exports = {
   add,
   remove,
-  help
+  help,
+  "-h": help
 };
