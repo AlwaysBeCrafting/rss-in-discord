@@ -13,8 +13,8 @@ module.exports = async (args, guildId, client) => {
       (await guild.channels.find(
         ch => ch.name === channelName && ch.type === "text"
       )) || (await guild.createChannel(channelName, "text"));
-
-    sendRssItems(rssFeed.items, channel.id, client);
+    await sendPinnedMessage(`rss URL: <${url}>`, channel.id, client);
+    await sendRssItems(rssFeed.items, channel.id, client);
     return `Feed Added.`;
   } catch (error) {
     console.error(error.name);
@@ -29,6 +29,16 @@ const sendRssItems = async (rssItems, channelId, client) => {
       const channel = await client.channels.get(channelId);
       await channel.send(`${item.title}: <${item.link}>`);
     }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const sendPinnedMessage = async (msg, channelId, client) => {
+  try {
+    const channel = await client.channels.get(channelId);
+    const message = await channel.send(msg);
+    return message.pin();
   } catch (error) {
     console.error(error);
   }
