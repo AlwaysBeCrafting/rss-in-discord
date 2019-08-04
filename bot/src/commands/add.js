@@ -14,7 +14,7 @@ module.exports = async (args, guildId, client) => {
         ch => ch.name === channelName && ch.type === "text"
       )) || (await guild.createChannel(channelName, "text"));
 
-    await unsubscribePinnedMessage(url, channel.id, client);
+    await sendLegend(url, channel.id, client);
     await sendRssItems(rssFeed.items, channel.id, client);
     return `Feed Added.`;
   } catch (error) {
@@ -36,7 +36,7 @@ const sendRssItems = async (rssItems, channelId, client) => {
   }
 };
 
-const unsubscribePinnedMessage = async (url, channelId, client) => {
+const sendLegend = async (url, channelId, client) => {
   const pinnedMessage = `rss URL: <${url}>
   Legend: 
     Expand message:   :arrow_lower_right: 
