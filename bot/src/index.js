@@ -2,21 +2,24 @@ const { Client } = require("discord.js");
 
 const commands = require("./commands");
 const { getFeed } = require("./utilities/getFeed");
+const { updateFeeds } = require("./utilities/updateFeeds");
+const { getFeedList } = require("./utilities/getFeedList");
 
-const feedList = ["https://xkcd.com/rss.xml"];
 const serverId = "458034851296313375";
 
 const client = new Client();
 
 client.on("ready", async () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  for (const rssFeed of feedList) {
-    try {
-      await commands.add([rssFeed], serverId, client);
-    } catch (error) {
-      console.error(error);
-    }
+  // for (const rssFeed of feedList) {
+  try {
+    await getFeedList(client);
+    // console.log(feeds);
+    // await commands.add([rssFeed], serverId, client);
+  } catch (error) {
+    console.error(error);
   }
+  // }
 });
 
 client.on("message", msg => {
