@@ -13,7 +13,8 @@ module.exports = async (args, guildId, client) => {
       (await guild.channels.find(
         ch => ch.name === channelName && ch.type === "text"
       )) || (await guild.createChannel(channelName, "text"));
-    await sendPinnedMessage(`rss URL: <${url}>`, channel.id, client);
+
+    await unsubscribePinnedMessage(url, channel.id, client);
     await sendRssItems(rssFeed.items, channel.id, client);
     return `Feed Added.`;
   } catch (error) {
@@ -27,17 +28,25 @@ const sendRssItems = async (rssItems, channelId, client) => {
   try {
     for (const item of rssItems) {
       const channel = await client.channels.get(channelId);
-      await channel.send(`${item.title}: <${item.link}>`);
+      const message = await channel.send(`${item.title}: <${item.link}>`);
+      await message.react('↘');
     }
   } catch (error) {
     console.error(error);
   }
 };
 
-const sendPinnedMessage = async (msg, channelId, client) => {
+const unsubscribePinnedMessage = async (url, channelId, client) => {
+  const pinnedMessage = `rss URL: <${url}>
+  Legend: 
+    Expand message:   :arrow_lower_right: 
+    Collapse message: :arrow_upper_left: 
+
+Click the X to Unsubscribe`;
   try {
     const channel = await client.channels.get(channelId);
-    const message = await channel.send(msg);
+    const message = await channel.send(pinnedMessage);
+    await message.react('❌');
     return message.pin();
   } catch (error) {
     console.error(error);
