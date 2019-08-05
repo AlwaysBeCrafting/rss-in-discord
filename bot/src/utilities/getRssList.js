@@ -1,5 +1,5 @@
-const getFeedList = async client => {
-  const feedList = {};
+const getRssList = async client => {
+  const rssList = {};
   await Promise.all(
     client.guilds.map(async guild => {
       try {
@@ -18,7 +18,7 @@ const getFeedList = async client => {
           )[0];
 
           if (rssUrl) {
-            feedList[guild.id] = { channels: { [channelId]: rssUrl } };
+            rssList[guild.id] = { [channelId]: rssUrl };
           }
         }
       } catch (error) {
@@ -26,7 +26,7 @@ const getFeedList = async client => {
       }
     })
   );
-  console.log(feedList);
+  return rssList;
 };
 
-module.exports = { getFeedList };
+module.exports = { getRssList };

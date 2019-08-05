@@ -3,43 +3,11 @@ const { Client } = require("discord.js");
 const commands = require("./commands");
 const { getFeed } = require("./utilities/getFeed");
 const { updateFeeds } = require("./utilities/updateFeeds");
-const { getFeedList } = require("./utilities/getFeedList");
+const { getRssList } = require("./utilities/getRssList");
 
 const serverId = "458034851296313375";
 
 const client = new Client();
-
-client.on("ready", async () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  // for (const rssFeed of feedList) {
-  try {
-    await getFeedList(client);
-    // console.log(feeds);
-    // await commands.add([rssFeed], serverId, client);
-  } catch (error) {
-    console.error(error);
-  }
-  // }
-});
-
-client.on("message", msg => {
-  if (msg.content === "ping") {
-    msg.reply("pong");
-  }
-  if (!msg.mentions.users.size) {
-    return;
-  } else if (msg.mentions.users.first().username === "RnD") {
-    const args = msg.content.split(/\s+/);
-    args.shift();
-    return runCommand(args, msg);
-  }
-});
-
-try {
-  client.login(process.env.BOT_TOKEN);
-} catch (error) {
-  console.error(error);
-}
 
 const runCommand = async (args, msg) => {
   const [cmd, ...rest] = args;
@@ -47,3 +15,33 @@ const runCommand = async (args, msg) => {
   const result = await command(rest, serverId, client);
   await msg.reply(result);
 };
+
+const start = async () => {
+  client.on("ready", async () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+  });
+
+  client.on("message", msg => {
+    if (msg.content === "ping") {
+      msg.reply("pong");
+    }
+    if (!msg.mentions.users.size) {
+      return;
+    } else if (msg.mentions.users.first().username === "RnD") {
+      const args = msg.content.split(/\s+/);
+      args.shift();
+      return runCommand(args, msg);
+    }
+  });
+
+  try {
+    await client.login(process.env.BOT_TOKEN);
+    const feedList = await getRssList(client);
+    const update = updateFeeds(feedList, client);
+    // console.log(feedList);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+start();
