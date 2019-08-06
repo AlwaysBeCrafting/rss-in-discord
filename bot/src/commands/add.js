@@ -1,6 +1,6 @@
 const { getFeed } = require("../utilities/getFeed");
 
-module.exports = async (args, guildId, client) => {
+const add = async (args, guildId, client) => {
   const [url] = args;
   if (!url) {
     return `Usage: @RnD add <rss URL>`;
@@ -29,7 +29,7 @@ const sendRssItems = async (rssItems, channelId, client) => {
     for (const item of rssItems) {
       const channel = await client.channels.get(channelId);
       const message = await channel.send(`${item.title}: <${item.link}>`);
-      await message.react('↘');
+      await message.react("↘");
     }
   } catch (error) {
     console.error(error);
@@ -46,9 +46,11 @@ Click the X to Unsubscribe`;
   try {
     const channel = await client.channels.get(channelId);
     const message = await channel.send(pinnedMessage);
-    await message.react('❌');
+    await message.react("❌");
     return message.pin();
   } catch (error) {
     console.error(error);
   }
 };
+
+module.exports = { add };
