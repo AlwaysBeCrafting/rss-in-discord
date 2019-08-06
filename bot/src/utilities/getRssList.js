@@ -18,7 +18,7 @@ const getRssList = async client => {
           )[0];
 
           if (rssUrl) {
-            rssList[guild.id] = { [channelId]: rssUrl };
+            rssList[channelId] = rssUrl;
           }
         }
       } catch (error) {

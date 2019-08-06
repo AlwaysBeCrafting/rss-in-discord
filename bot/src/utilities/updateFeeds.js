@@ -1,34 +1,27 @@
 const { getFeed } = require("./getFeed");
+const { sendRssItems } = require("./sendRssItems");
 
 const updateFeeds = async (feedList, client) => {
   const rssUrls = extractRssUrls(feedList);
-  const feeds = fetchFeeds(rssUrls);
-};
-
-const sendRssItems = async (rssItems, channelId, client) => {
-  try {
-    for (const item of rssItems) {
-      const channel = await client.channels.get(channelId);
-      const message = await channel.send(`${item.title}: <${item.link}>`);
-      await message.react("↘");
-    }
-  } catch (error) {
-    console.error(error);
+  const fetchedFeeds = await fetchFeeds(rssUrls);
+  for (const [channelId, rssUrl] of Object.entries(feedList)) {
+    const sendItems = await sendRssItems(
+      fetchedFeeds[rssUrl],
+      channelId,
+      client
+    );
   }
 };
 
 const extractRssUrls = feedList => {
   const rssUrlsSet = new Set();
-  for (const [guild, channels] of Object.entries(feedList)) {
-    for (const [channelId, rssUrl] of Object.entries(channels)) {
-      rssUrlsSet.add(rssUrl);
-    }
+  for (const [channelId, rssUrl] of Object.entries(feedList)) {
+    rssUrlsSet.add(rssUrl);
   }
   return [...rssUrlsSet];
 };
 
 const fetchFeeds = async urlList => {
-  console.log(urlList);
   const feeds = {};
   try {
     for (const url of urlList) {
@@ -37,6 +30,6 @@ const fetchFeeds = async urlList => {
   } catch (error) {
     console.error(error);
   }
-  console.log(feeds);
+  return feeds;
 };
 module.exports = { updateFeeds };
