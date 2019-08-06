@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "discord.js": "^11.3.2",
-    "feed-to-json-promise": "^1.8.2"
+    "feed-to-json-promise": "^1.8.2",
+    "lodash": "^4.17.15"
   }
 }
