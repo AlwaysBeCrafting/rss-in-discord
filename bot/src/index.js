@@ -36,9 +36,10 @@ const start = async () => {
 
   try {
     await client.login(process.env.BOT_TOKEN);
-    const feedList = await getRssList(client);
-    const update = updateFeeds(feedList, client);
-    // console.log(feedList);
+    setInterval(async () => {
+      const feedList = await getRssList(client);
+      const update = updateFeeds(feedList, client);
+    }, 300000);
   } catch (error) {
     console.error(error);
   }
