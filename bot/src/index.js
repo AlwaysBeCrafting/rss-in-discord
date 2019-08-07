@@ -1,6 +1,7 @@
 const { Client } = require("discord.js");
 
 const commands = require("./commands");
+const reactions = require("./reactions");
 const { getFeed } = require("./utilities/getFeed");
 const { updateFeeds } = require("./utilities/updateFeeds");
 const { getRssList } = require("./utilities/getRssList");
@@ -28,10 +29,11 @@ const start = async () => {
   client.on("message", msg => {
     if (msg.content === "ping") {
       msg.reply("pong");
+      return;
     }
     if (!msg.mentions.users.size) {
       return;
-    } else if (msg.mentions.users.first().username === "RnD") {
+    } else if (msg.mentions.users.first().id === client.user.id) {
       const args = msg.content.split(/\s+/);
       args.shift();
       return runCommand(args, msg);
@@ -39,31 +41,11 @@ const start = async () => {
   });
 
   client.on("raw", async event => {
-    if (!events.hasOwnProperty(event.t) || event.d.user_id === client.user.id)
+    if (!events.hasOwnProperty(event.t) || event.d.user_id === client.user.id) {
       return;
-
-    const { user_id, message_id, emoji, channel_id, guild_id } = event.d;
-    const channel = await client.channels.get(channel_id);
-
-    if (emoji.name === "❌") {
-      channel.delete();
-    } else if (emoji.name === "↘") {
-      const message = await channel.fetchMessage(message_id);
-      const parsedMessageContent = message.content.match(/([^<]+)<([^>]+)>/);
-      const title = parsedMessageContent[1];
-      const url = parsedMessageContent[2];
-      await message.edit(`${title}${url}`);
-      await message.clearReactions();
-      await message.react("↖");
-    } else if (emoji.name === "↖") {
-      const message = await channel.fetchMessage(message_id);
-      const parsedMessageContent = message.content.match(/(.+:\s+)(\S+)/);
-      const title = parsedMessageContent[1];
-      const url = parsedMessageContent[2];
-      await message.edit(`${title}<${url}>`, { embed: null });
-      await message.clearReactions();
-      await message.react("↘");
     }
+    const { message_id, emoji, channel_id } = event.d;
+    await reactions[emoji.name](message_id, channel_id, client);
   });
 
   try {
