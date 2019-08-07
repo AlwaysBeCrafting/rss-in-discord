@@ -1,4 +1,4 @@
-const add = require("./add");
+const { add } = require("./add");
 const remove = require("./remove");
 const help = require("./help");
 
