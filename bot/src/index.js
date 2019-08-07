@@ -29,11 +29,11 @@ const start = async () => {
   client.on("message", msg => {
     if (msg.content === "ping") {
       msg.reply("pong");
-      return;
     }
-    if (!msg.mentions.users.size) {
-      return;
-    } else if (msg.mentions.users.first().id === client.user.id) {
+    if (
+      msg.mentions.users.size &&
+      msg.mentions.users.first().id === client.user.id
+    ) {
       const args = msg.content.split(/\s+/);
       args.shift();
       return runCommand(args, msg);
@@ -41,11 +41,13 @@ const start = async () => {
   });
 
   client.on("raw", async event => {
-    if (!events.hasOwnProperty(event.t) || event.d.user_id === client.user.id) {
-      return;
+    if (
+      events.hasOwnProperty(event.t) &&
+      !(event.d.user_id === client.user.id)
+    ) {
+      const { message_id, emoji, channel_id } = event.d;
+      await reactions[emoji.name](message_id, channel_id, client);
     }
-    const { message_id, emoji, channel_id } = event.d;
-    await reactions[emoji.name](message_id, channel_id, client);
   });
 
   try {
