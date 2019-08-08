@@ -41,10 +41,7 @@ const start = async () => {
   });
 
   client.on("raw", async event => {
-    if (
-      events.hasOwnProperty(event.t) &&
-      !(event.d.user_id === client.user.id)
-    ) {
+    if (events.hasOwnProperty(event.t) && event.d.user_id !== client.user.id) {
       const { message_id, emoji, channel_id } = event.d;
       await reactions[emoji.name](message_id, channel_id, client);
     }
