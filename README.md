@@ -3,6 +3,13 @@
     RSS in Discord is a project aimed at making RSS easier to consume by using Discord to display the content of a feed.
 </div>
 
+<h2 align="center">Quick Start</h2>
+
+Add my bot to your server:
+https://discordapp.com/oauth2/authorize?client_id=467818241637482506&scope=bot
+
+Add a new rss feed by typing `@RnD add [feed]`
+
 <h2 align="center">Installation</h2>
 
 This project uses Docker and docker-compose to streamline the build process. You can find instructions on how to install both of these from the docker website, or click <a href="https://docs.docker.com/compose/gettingstarted/">here</a>.
@@ -29,7 +36,6 @@ You can add feeds to your Discord server using either the <a>RnD Website</a> or 
 
 <h2 align="center">Commands</h2>
 
-- `!sub [feed]`
-- `!unsub [feed]`
-- `!settings`
-- `!help`
+- `@[botname] add [feed]`
+- `@[botname] remove [feed]`
+- `@[botname] help`
