@@ -1,0 +1,30 @@
+{
+  "name": "rss-in-discord",
+  "version": "0.1.0",
+  "description": "A rss bot for discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "nodemon --watch ./src ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlwaysBeCrafting/rss-in-discord.git"
+  },
+  "author": "Mark Halls",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlwaysBeCrafting/rss-in-discord/issues"
+  },
+  "homepage": "https://github.com/AlwaysBeCrafting/rss-in-discord#readme",
+  "devDependencies": {
+    "jest": "^23.1.0",
+    "nodemon": "^1.18.2",
+    "prettier": "^1.13.5"
+  },
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "feed-to-json-promise": "^1.8.2",
+    "lodash": "^4.17.15"
+  }
+}
