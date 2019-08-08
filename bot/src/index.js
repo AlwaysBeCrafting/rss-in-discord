@@ -6,14 +6,12 @@ const { getFeed } = require("./utilities/getFeed");
 const { updateFeeds } = require("./utilities/updateFeeds");
 const { getRssList } = require("./utilities/getRssList");
 
-const serverId = "458034851296313375";
-
 const client = new Client();
 
 const runCommand = async (args, msg) => {
   const [cmd, ...rest] = args;
   const command = commands[cmd] || commands.help;
-  const result = await command(rest, serverId, client);
+  const result = await command(rest, msg, client);
   await msg.reply(result);
 };
 
