@@ -1,6 +1,7 @@
 const { Client } = require("discord.js");
 
 const commands = require("./commands");
+const reactions = require("./reactions");
 const { getFeed } = require("./utilities/getFeed");
 const { updateFeeds } = require("./utilities/updateFeeds");
 const { getRssList } = require("./utilities/getRssList");
@@ -17,6 +18,10 @@ const runCommand = async (args, msg) => {
 };
 
 const start = async () => {
+  const events = {
+    MESSAGE_REACTION_ADD: "messageReactionAdd"
+  };
+
   client.on("ready", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
   });
@@ -25,12 +30,20 @@ const start = async () => {
     if (msg.content === "ping") {
       msg.reply("pong");
     }
-    if (!msg.mentions.users.size) {
-      return;
-    } else if (msg.mentions.users.first().username === "RnD") {
+    if (
+      msg.mentions.users.size &&
+      msg.mentions.users.first().id === client.user.id
+    ) {
       const args = msg.content.split(/\s+/);
       args.shift();
       return runCommand(args, msg);
+    }
+  });
+
+  client.on("raw", async event => {
+    if (events.hasOwnProperty(event.t) && event.d.user_id !== client.user.id) {
+      const { message_id, emoji, channel_id } = event.d;
+      await reactions[emoji.name](message_id, channel_id, client);
     }
   });
 
