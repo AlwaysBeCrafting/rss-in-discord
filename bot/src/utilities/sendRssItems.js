@@ -7,7 +7,8 @@ const sendRssItems = async (rssItems, channelId, client) => {
       limit: _.size(rssItems.items)
     });
     const messageContents = channelMessages.map(message => message.content);
-    for (const item of rssItems.items) {
+    const reverseItems = [...rssItems.items].reverse();
+    for (const item of reverseItems) {
       const rssMessage = `${item.title}: <${item.link}>`;
 
       if (
