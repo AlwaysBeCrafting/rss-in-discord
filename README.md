@@ -8,6 +8,17 @@
 Add my bot to your server:
 https://discordapp.com/oauth2/authorize?client_id=467818241637482506&scope=bot
 
+Create a <a href="https://support.discordapp.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-">new Server Role</a> for the bot, I recommend naming it @RnD.
+Give the new Role the following permissions:
+
+- Manage Channels
+- Read Text Channels and See Voice Channels
+- Send Messages
+- Read Message History
+- Add Reactions
+
+Make sure you assign the bot the new Role. See the <a href="https://support.discordapp.com/hc/en-us/articles/206029707-How-do-I-set-up-Permissions-">Assigning Roles</a> section.
+
 Add a new rss feed by typing `@RnD add [feed]`
 
 <h2 align="center">Installation</h2>
