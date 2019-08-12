@@ -12,7 +12,7 @@ Create a <a href="https://support.discordapp.com/hc/en-us/articles/206029707-How
 Give the new Role the following permissions:
 
 - Manage Channels
-- Read Text and See Voice Channels
+- Read Text Channels and See Voice Channels
 - Send Messages
 - Read Message History
 - Add Reactions
